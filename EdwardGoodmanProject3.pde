@@ -1,6 +1,8 @@
 Camera myCam = new Camera();
 PShape miniMonster;
 PShape wireMonster;
+boolean isKey;
+PShape cube;
 
 void setup(){
   
@@ -12,32 +14,85 @@ void setup(){
   
   
   miniMonster = loadShape("monster.obj");
-  miniMonster.setFill(color(255,255,0));
-  PVector miniMonsPos = new PVector(0,0,0);
+  miniMonster.setFill(color(175,175,0));
+  PVector miniMonsPos = new PVector(0,-10,0);
   myCam.AddLookAtTarget(miniMonsPos);
   wireMonster = loadShape ("monster.obj");
   wireMonster.setFill(color(0, 0));
   wireMonster.setStroke(true);
   wireMonster.setStroke(color(1));
-  wireMonster.setStrokeWeight(0.25f);
-  PVector wireMons = new PVector(75, 0, 0);
+  wireMonster.setStrokeWeight(0.5f);
+  PVector wireMons = new PVector(75, -10, 0);
   myCam.AddLookAtTarget(wireMons);
-  PVector hexes = new PVector(-50,0,0);
+  PVector cubes = new PVector(-100,0,0);
+  myCam.AddLookAtTarget(cubes);
+  PVector hexes = new PVector(-50,-10,0);
   myCam.AddLookAtTarget(hexes);
   myCam.currentTargetIndex = 0;
 
+ 
+
+  
+  cube = createShape();
+  cube.beginShape(TRIANGLE_STRIP);
+  
+  cube.vertex(-0.5,0.5,0.5);
+  cube.vertex(-0.5,-0.5,0.5);
+  cube.vertex(0.5,0.5,0.5);
+  cube.vertex(0.5,-0.5,0.5);
+ 
+  
+  
+  cube.vertex(0.5,0.5,-0.5);
+  cube.vertex(0.5,-0.5,-0.5);
+  cube.vertex(-0.5,0.5,-0.5);
+  cube.vertex(-0.5,-0.5,-0.5);
+  cube.vertex(-0.5,0.5,0.5);
+  cube.vertex(-0.5,-0.5,0.5);
+  
+  cube.vertex(-0.5,-0.5,0.5);
+  cube.vertex(0.5,-0.5,0.5);
+  cube.vertex(0.5,-0.5,-0.5);
+  cube.vertex(0.5,-0.5,-0.5);
+  cube.vertex(-0.5,-0.5,-0.5);
+  cube.vertex(-0.5,-0.5,0.5);
+  
+  cube.vertex(-0.5,0.5,0.5);
+  cube.vertex(-0.5,0.5,0.5);
+  cube.vertex(0.5,0.5,0.5);
+  cube.vertex(0.5,0.5,-0.5);
+  cube.vertex(0.5,0.5,-0.5);
+  cube.vertex(-0.5,0.5,-0.5);
+  cube.vertex(-0.5,0.5,0.5);
+  
+
+ 
+  
+  
+  cube.endShape();
+
+
+  isKey = false;
 }
 
 void draw(){
 
+  
+  colorMode(RGB, 255, 255, 255);
   background(180,180,180);
   
-  if(key == ' '){
-    myCam.CycleTarget();
+  
+  if(keyPressed == true && !isKey){
+    if(key == ' '){
+      isKey = true;
+      myCam.CycleTarget();
+    }
+  
   }
   
   
-   for(int i = -100; i < 100; i+=10){
+  
+   for(int i = -100; i < 110; i+=10){
     
     if(i == 0){
       stroke(255,0,0);
@@ -67,15 +122,99 @@ void draw(){
 
   }
   
+  translate(50,0,0);
+  pushMatrix();
+  
+  //createFan(6);
+  
+  translate(-10,10,0);
+  stroke(0);
   beginShape(TRIANGLE_FAN);
-  vertex(25, 25);
-  vertex(25 * cos(radians(60.0f)), 25 * sin(radians(60.0f)));
-  vertex(25 * cos(radians(120.0f)), 25 * sin(radians(120.0f)));
-  vertex(-25,25);
-  vertex(25 * cos(radians(240.0f)), 25 * sin(radians(240.0f)));
-  vertex(25 * cos(radians(300.0f)), 25 * sin(radians(300.0f)));
-  vertex(25, 25);
+  fill(255,0,0);
+  vertex(-10,0);
+  fill(255,255,0);
+  vertex((-10 * cos(radians(60.0f))), (-10 * sin(radians(60.0f))));
+  fill(0,255,0);
+  vertex((-10 * cos(radians(120.0f))), (-10 * sin(radians(120.0f))));
+  fill(0,255,255);
+  vertex(10,0);
+  fill(0,0,255);
+  vertex((-10 * cos(radians(240.0f))), (-10 * sin(radians(240.0f))));
+  fill(255,0,255);
+  vertex((-10 * cos(radians(300.0f))), (-10 * sin(radians(300.0f))));
   endShape();
+  
+  translate(20,0,0);
+  stroke(0);
+  strokeWeight(1.2);
+  createFan(20);
+  
+  popMatrix();
+  translate(-50,0,0); //now at origin
+  
+  translate(100,0,0);
+  pushMatrix();
+  scale(5,5,5);
+  shape(cube);
+  popMatrix();
+  
+  pushMatrix();
+  translate(10,0,0);
+  shape(cube);
+  popMatrix();
+  
+  pushMatrix(); 
+  translate(-10,0,0);
+  scale(10,20,10);
+  shape(cube);
+  popMatrix();
+  
+}
+
+
+
+void keyReleased(){
+  
+  if(key == ' '){
+    isKey = false;
+  }
+  
+  
+}
+
+
+void mouseWheel(MouseEvent event){
+  
+  float e = event.getCount();
+  if (e > 0){
+    myCam.Zoom(5.0);
+  }
+  else{myCam.Zoom(-5.0);}
+  
+}
+
+
+
+void createFan(int sides){
+  
  
+  
+  float ratio = 360/(float)sides;
+  float currentRatio = 0.0;
+  int radius = -10;
+  colorMode(HSB, 360, 100, 100);
+  beginShape();
+  stroke(0);
+  for(int i = 0; i < sides; i++){
+    
+    fill(i*18, 100, 100);
+    vertex(radius*cos(radians(currentRatio)), radius*sin(radians(currentRatio))); //lines for 20 sided one
+    currentRatio += ratio;
+    
+  }
+  
+  vertex(radius,0);
+  endShape();
+  
   
 }

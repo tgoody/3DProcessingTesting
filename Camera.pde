@@ -5,9 +5,11 @@ class Camera{
   ArrayList<PVector> myTargets = new ArrayList<PVector>();
   PVector currentTarget;
   int currentTargetIndex;
+  int radius;
   
   void setUpCamera(){
     perspective(radians(50.0f), float(width)/float(height), 0.1, 1000);
+    radius = 100;
     
   }
   
@@ -19,12 +21,9 @@ class Camera{
     float theta = map(mouseY, 0, height-1, 1, 179);
     
     
-    float derivedX = 100 * cos(phi) * sin(theta);
-    println("X: " + derivedX);
-    float derivedY = 100 * cos(theta);
-    println("Y: " + derivedY);
-    float derivedZ = 100 * sin(phi) * sin(theta);
-    println("Z: " + derivedZ);
+    float derivedX = radius * cos(radians(phi)) * sin(radians(theta));
+    float derivedY = radius * cos(radians(theta));
+    float derivedZ = radius * sin(radians(phi)) * sin(radians(theta));
     
     float positionX  = currentTarget.x + derivedX;
     float positionY = currentTarget.y + derivedY;
@@ -59,6 +58,15 @@ class Camera{
   }
   
   void Zoom(float zoomAmount){
+    
+    radius+=zoomAmount;
+    if(radius > 300){
+     radius = 300; 
+    }
+    
+    if(radius < 25){
+      radius = 25;
+    }
     
   }
   
