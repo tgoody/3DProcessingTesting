@@ -21,7 +21,7 @@ void setup(){
   wireMonster.setFill(color(0, 0));
   wireMonster.setStroke(true);
   wireMonster.setStroke(color(1));
-  wireMonster.setStrokeWeight(0.5f);
+  wireMonster.setStrokeWeight(.5f);
   PVector wireMons = new PVector(75, -10, 0);
   myCam.AddLookAtTarget(wireMons);
   PVector cubes = new PVector(-100,0,0);
@@ -31,46 +31,78 @@ void setup(){
   myCam.currentTargetIndex = 0;
 
  
-
+/////////////////////////////// Begin Cube Work
   
   cube = createShape();
-  cube.beginShape(TRIANGLE_STRIP);
+  cube.beginShape(TRIANGLE);
+  cube.setStroke(false);
   
+  cube.fill(color(0,255,0));
   cube.vertex(-0.5,0.5,0.5);
-  cube.vertex(-0.5,-0.5,0.5);
+  cube.vertex(-0.5,-0.5,0.5); //front one
   cube.vertex(0.5,0.5,0.5);
+  
+  cube.fill(color(255,255,0));
+  cube.vertex(-0.5,-0.5,0.5);
+  cube.vertex(0.5,0.5,0.5); //front two
   cube.vertex(0.5,-0.5,0.5);
- 
   
   
+  cube.fill(color(200));
+  cube.vertex(0.5,0.5,0.5);
+  cube.vertex(0.5,-0.5,0.5); //left side one
+  cube.vertex(0.5,0.5,-0.5);
+  
+  cube.fill(color(0,0,255));
+  cube.vertex(0.5,-0.5,0.5); //left side two
+  cube.vertex(0.5,0.5,-0.5);
+  cube.vertex(0.5,-0.5,-0.5);
+  
+  cube.fill(color(255));
   cube.vertex(0.5,0.5,-0.5);
   cube.vertex(0.5,-0.5,-0.5);
   cube.vertex(-0.5,0.5,-0.5);
+  
+  cube.fill(color(255,0,0));
+  cube.vertex(0.5,-0.5,-0.5);
+  cube.vertex(-0.5,0.5,-0.5);
+  cube.vertex(-0.5,-0.5,-0.5);
+  
+  cube.fill(color(0,255,255));
+  cube.vertex(-0.5,0.5,-0.5);
+  cube.vertex(-0.5,-0.5,-0.5);
+  cube.vertex(-0.5,0.5,0.5);
+  
+  cube.fill(color(255,100,0));
   cube.vertex(-0.5,-0.5,-0.5);
   cube.vertex(-0.5,0.5,0.5);
   cube.vertex(-0.5,-0.5,0.5);
   
-  cube.vertex(-0.5,-0.5,0.5);
-  cube.vertex(0.5,-0.5,0.5);
-  cube.vertex(0.5,-0.5,-0.5);
-  cube.vertex(0.5,-0.5,-0.5);
-  cube.vertex(-0.5,-0.5,-0.5);
-  cube.vertex(-0.5,-0.5,0.5);
-  
+  cube.fill(color(80,20,60));
   cube.vertex(-0.5,0.5,0.5);
+  cube.vertex(-0.5,0.5,-0.5);
+  cube.vertex(0.5,0.5,-0.5);
+  
+  cube.fill(color(0,150,255));
   cube.vertex(-0.5,0.5,0.5);
   cube.vertex(0.5,0.5,0.5);
   cube.vertex(0.5,0.5,-0.5);
-  cube.vertex(0.5,0.5,-0.5);
-  cube.vertex(-0.5,0.5,-0.5);
-  cube.vertex(-0.5,0.5,0.5);
   
-
- 
+   cube.fill(color(80,20,60));
+  cube.vertex(-0.5,-0.5,0.5);
+  cube.vertex(-0.5,-0.5,-0.5);
+  cube.vertex(0.5,-0.5,-0.5);
+  
+  cube.fill(color(0,150,255));
+  cube.vertex(-0.5,-0.5,0.5);
+  cube.vertex(0.5,-0.5,0.5);
+  cube.vertex(0.5,-0.5,-0.5);
+  
   
   
   cube.endShape();
 
+/////////////////////////////// End Cube Work
 
   isKey = false;
 }
@@ -125,7 +157,6 @@ void draw(){
   translate(50,0,0);
   pushMatrix();
   
-  //createFan(6);
   
   translate(-10,10,0);
   stroke(0);
@@ -143,6 +174,9 @@ void draw(){
   fill(255,0,255);
   vertex((-10 * cos(radians(300.0f))), (-10 * sin(radians(300.0f))));
   endShape();
+  
+  
+  
   
   translate(20,0,0);
   stroke(0);
@@ -196,15 +230,14 @@ void mouseWheel(MouseEvent event){
 
 
 void createFan(int sides){
-  
- 
+   stroke(0);
   
   float ratio = 360/(float)sides;
   float currentRatio = 0.0;
   int radius = -10;
   colorMode(HSB, 360, 100, 100);
-  beginShape();
-  stroke(0);
+  beginShape(TRIANGLE_FAN);
+  
   for(int i = 0; i < sides; i++){
     
     fill(i*18, 100, 100);

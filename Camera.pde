@@ -60,12 +60,12 @@ class Camera{
   void Zoom(float zoomAmount){
     
     radius+=zoomAmount;
-    if(radius > 300){
-     radius = 300; 
+    if(radius > 200){
+     radius = 200; 
     }
     
-    if(radius < 25){
-      radius = 25;
+    if(radius < 30){
+      radius = 30;
     }
     
   }
